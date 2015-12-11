@@ -272,10 +272,28 @@ app.directive "quickDatepicker", ['ngQuickDateDefaults', '$filter', '$sce', (ngQ
     # ==================================
     scope.toggleCalendar = debounce(
       (show) ->
+        setPopupPosition = () ->
+          popupHeight = 300
+          popupWidth = 250
+          y_Depth = element[0].getBoundingClientRect().top + element[0].getBoundingClientRect().height + popupHeight
+          x_Depth = element[0].getBoundingClientRect().left + element[0].getBoundingClientRect().width + popupWidth
+          if y_Depth > window.innerHeight && window.innerHeight > popupHeight
+            scope.popupTop = true
+          else
+            scope.popupTop = false
+            
+          if x_Depth > window.innerWidth && window.innerWidth > popupWidth
+            scope.popupLeft = true
+          else
+            scope.popupLeft = false
+          return
         if isFinite(show)
           scope.calendarShown = show
         else
           scope.calendarShown = not scope.calendarShown
+        if scope.calendarShown
+          setPopupPosition()
+        return scope.calendarShown
       150
     )
 
@@ -351,7 +369,7 @@ app.directive "quickDatepicker", ['ngQuickDateDefaults', '$filter', '$sce', (ngQ
   template: """
             <div class='quickdate'>
               <a href='' ng-focus='toggleCalendar()' ng-click='toggleCalendar()' class='quickdate-button' title='{{hoverText}}'><div ng-hide='iconClass' ng-bind-html='buttonIconHtml'></div>{{mainButtonStr}}</a>
-              <div class='quickdate-popup' ng-class='{open: calendarShown}'>
+              <div class='quickdate-popup' ng-class=\"{open: calendarShown, 'popup-top': popupTop, 'popup-left': popupLeft}\">
                 <a href='' tabindex='-1' class='quickdate-close' ng-click='toggleCalendar()'><div ng-bind-html='closeButtonHtml'></div></a>
                 <div class='quickdate-text-inputs'>
                   <div class='quickdate-input-wrapper'>

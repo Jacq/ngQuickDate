@@ -102,3 +102,9 @@ table.quickdate-calendar td.is-today.disabled-date {
 .quickdate-clear:hover {
   background-color: #f2f2f2;
 }
+.quickdate-popup.popup-top {
+  top: -315px;
+}
+.quickdate-popup.popup-left {
+  right: 0;
+}
